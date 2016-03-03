@@ -7,6 +7,7 @@
 
         <LinearLayout style="@style/details_row_style">
 
+
             <TextView
                 android:id="@+id/id"
                 android:text="@string/id"

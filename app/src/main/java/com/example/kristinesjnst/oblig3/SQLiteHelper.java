@@ -1,6 +1,5 @@
 package com.example.kristinesjnst.oblig3;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,7 +8,7 @@ import java.sql.SQLException;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "WeatherDB.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
     public static final String WEATHER_TABLE = "WeatherTable";
 
     public static final String KEY_PRIMARY_ID = "_id";

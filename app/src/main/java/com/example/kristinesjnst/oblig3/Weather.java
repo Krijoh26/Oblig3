@@ -22,4 +22,54 @@ public class Weather {
     }
     public Weather() {
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setStationName(String station_name) {
+        this.station_name = station_name;
+    }
+
+    public void setStationPosition(String station_position) {
+        this.station_position = station_position;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setPressure(double pressure) {
+        this.pressure = pressure;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
+
+    public int getId(){
+        return id;
+    }
+    public String getStation_name(){
+        return station_name;
+    }
+    public String getStation_position(){
+        return station_position;
+    }
+    public String getTimestamp(){
+        return timestamp;
+    }
+    public double getTemperature(){
+        return temperature;
+    }
+    public double getPressure(){
+        return pressure;
+    }
+    public double getHumidity(){
+        return humidity;
+    }
 }
