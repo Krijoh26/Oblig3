@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@color/primary_background_color">
+
+        <LinearLayout style="@style/details_row_style">
+
+            <TextView
+                android:id="@+id/id"
+                android:text="@string/id"
+                style="@style/item_style"/>
+
+            <TextView
+                android:id="@+id/idView"
+                style="@style/item_style"/>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/details_row_style">
+
+            <TextView
+                android:id="@+id/stationName"
+                android:text="@string/stationName"
+                style="@style/item_style"/>
+
+            <TextView
+                android:id="@+id/stationNameView"
+                style="@style/item_style"/>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/details_row_style">
+
+            <TextView
+                android:id="@+id/stationPosition"
+                android:text="@string/stationPosition"
+                style="@style/item_style"/>
+
+            <TextView
+                android:id="@+id/stationPositionView"
+                style="@style/item_style"/>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/details_row_style">
+
+            <TextView
+                android:id="@+id/timestamp"
+                android:text="@string/timestamp"
+                style="@style/item_style"/>
+
+            <TextView
+                android:id="@+id/timestampView"
+                style="@style/item_style"/>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/details_row_style">
+
+            <TextView
+                android:id="@+id/temperature"
+                android:text="@string/temperature"
+                style="@style/item_style"/>
+
+            <TextView
+                android:id="@+id/temperatureView"
+                style="@style/item_style"/>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/details_row_style">
+
+            <TextView
+                android:id="@+id/pressure"
+                android:text="@string/pressure"
+                style="@style/item_style"/>
+
+            <TextView
+                android:id="@+id/pressureView"
+                style="@style/item_style"/>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/details_row_style">
+
+            <TextView
+                android:id="@+id/humidity"
+                android:text="@string/humidity"
+                style="@style/item_style"/>
+
+            <TextView
+                android:id="@+id/humidityView"
+                style="@style/item_style"/>
+
+        </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/idlv"/>
+    </LinearLayout>

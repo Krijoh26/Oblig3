@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="download">Download</string>
+    <string name="quit">Quit</string>
+    <string name="settings">Settings</string>
+    <string name="id">Id</string>
+    <string name="stationName">Station Name</string>
+    <string name="stationPosition">Station position</string>
+    <string name="temperature">Temperature</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="inline_preferences" />
+    <string name="title_checkbox_preference" />
+    <string name="summary_checkbox_preference" />
+    <string name="dialog_based_preferences" />
+    <string name="title_edittext_preference" />
+    <string name="summary_edittext_preference" />
+    <string name="dialog_title_edittext_preference" />
+    <string name="title_list_preference" />
+    <string name="summary_list_preference" />
+    <string name="dialog_title_list_preference" />
+    <string name="launch_preferences" />
+    <string name="title_fragment_preference" />
+    <string name="summary_fragment_preference" />
+    <string name="title_intent_preference" />
+    <string name="summary_intent_preference" />
+    <string name="preference_attributes" />
+    <string name="title_parent_preference" />
+    <string name="summary_parent_preference" />
+    <string name="title_child_preference" />
+    <string name="summary_child_preference" />
+</resources>
