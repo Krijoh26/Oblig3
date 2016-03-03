@@ -30,4 +30,5 @@
     <string name="summary_parent_preference" />
     <string name="title_child_preference" />
     <string name="summary_child_preference" />
+    <string name="showSaved">Show data</string>
 </resources>

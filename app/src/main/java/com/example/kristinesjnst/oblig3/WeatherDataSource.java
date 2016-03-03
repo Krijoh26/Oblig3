@@ -58,6 +58,8 @@ public class WeatherDataSource {
             return false;
     }
 
+
+
     public List<Weather> getAllWeather() {
         List<Weather> list = new ArrayList<Weather>();
 
@@ -95,5 +97,54 @@ public class WeatherDataSource {
         weather.setHumidity(cursor.getInt(cursor.getColumnIndexOrThrow(SQLiteHelper.KEY_HUMIDITY)));
 
         return weather;
+    }
+
+    public ArrayList<Weather> getAllDataFromDb() {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ArrayList<Weather> weatherDatas = new ArrayList<>();
+
+        String[] projection = {
+                SQLiteHelper.KEY_PRIMARY_ID,
+                SQLiteHelper.KEY_ID, SQLiteHelper.KEY_STATION_NAME,
+                SQLiteHelper.KEY_STATION_POSITION, SQLiteHelper.KEY_TIMESTAMP,
+                SQLiteHelper.KEY_TEMPERATURE, SQLiteHelper.KEY_PRESSURE,
+                SQLiteHelper.KEY_HUMIDITY
+        };
+
+
+        String sortOrder =
+                SQLiteHelper.KEY_PRIMARY_ID + " ASC";
+
+
+        Cursor cursor = db.query(
+                SQLiteHelper.WEATHER_TABLE, projection, null, null, null, null, sortOrder
+        );
+        cursor.moveToFirst();
+
+
+        while (!cursor.isLast() && !cursor.isBeforeFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(SQLiteHelper.KEY_ID));
+            String station_name = cursor.getString(cursor.getColumnIndexOrThrow(SQLiteHelper.KEY_STATION_NAME));
+            String station_position = cursor.getString(cursor.getColumnIndexOrThrow(SQLiteHelper.KEY_STATION_POSITION));
+            String timestamp = cursor.getString(cursor.getColumnIndexOrThrow(SQLiteHelper.KEY_TIMESTAMP));
+            double temperature = cursor.getDouble(cursor.getColumnIndexOrThrow(SQLiteHelper.KEY_TEMPERATURE));
+            double pressure = cursor.getDouble(cursor.getColumnIndexOrThrow(SQLiteHelper.KEY_PRESSURE));
+            double humidity = cursor.getDouble( cursor.getColumnIndexOrThrow(SQLiteHelper.KEY_HUMIDITY));
+            weatherDatas.add(new Weather(id, station_name,station_position,timestamp,temperature,pressure,humidity));
+
+            cursor.moveToNext();
+        }
+
+        close();
+        return weatherDatas;
+    }
+
+    public void deleteAllStoredData(){
+        database.delete(SQLiteHelper.WEATHER_TABLE, null, null);
     }
 }

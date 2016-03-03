@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,13 +32,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-       ListView listView = (ListView) findViewById(R.id.idlv);
-
-        List<Weather> values = weatherDataSource.getAllWeather();
-
-
-        ArrayAdapter<Weather> adapter = new ArrayAdapter<Weather>(this, R.layout.list_fragment, values);
-        listView.setAdapter(adapter);
+//       ListView listView = (ListView) findViewById(R.id.idlv);
+//
+//        List<Weather> values = weatherDataSource.getAllWeather();
+//
+//
+//        ArrayAdapter<Weather> adapter = new ArrayAdapter<Weather>(this, R.layout.list_fragment, values);
+//        listView.setAdapter(adapter);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentList = (FragmentList)fragmentManager.findFragmentById(R.id.list_fragment);
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentList.getWeatherFromUrl();
                 return true;
             case R.id.showSaved:
-//                showSavedData();
+                showSavedData();
 
             case R.id.quit:
                 this.finish();
@@ -67,9 +68,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void showSavedData() {
-//        StringBuffer stringBuffer = new StringBuffer();
-//        while ()
-//            stringBuffer.append("id" + weather.getId());
-//    }
+    private void showSavedData() {
+        WeatherDataSource source = new WeatherDataSource(this);
+        ArrayList<Weather> weatherDatas = source.getAllDataFromDb();
+
+        ((TextView) findViewById(R.id.idView)).setText(String.valueOf(weatherDatas.get(3)));
+    }
 }

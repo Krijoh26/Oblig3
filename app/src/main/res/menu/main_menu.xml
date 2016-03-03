@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/showSaved"
-        android:title="@string/settings"
+        android:title="@string/showSaved"
         app:showAsAction="never"/>
 
     <item
