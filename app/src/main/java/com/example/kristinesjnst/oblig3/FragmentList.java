@@ -1,18 +1,13 @@
 package com.example.kristinesjnst.oblig3;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import java.io.IOException;
@@ -23,8 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import android.widget.TextView;
 import com.google.gson.Gson;
 
 public class FragmentList extends Fragment implements OnItemClickListener {
@@ -32,19 +25,8 @@ public class FragmentList extends Fragment implements OnItemClickListener {
     private SimpleCursorAdapter cursorAdapter = null;
     private WeatherDataSource weatherDataSource = null;
     private ListView listView;
-    private boolean dualPane;
     private int currentPosition = 0;
     private static final String POSITION = "position";
-    private static ArrayList<Weather> weatherArrayList = null;
-
-    private String[] projection = {SQLiteHelper.KEY_ID,
-            SQLiteHelper.KEY_STATION_NAME,
-            SQLiteHelper.KEY_STATION_POSITION,
-            SQLiteHelper.KEY_TIMESTAMP,
-            SQLiteHelper.KEY_TEMPERATURE,
-            SQLiteHelper.KEY_PRESSURE,
-            SQLiteHelper.KEY_HUMIDITY};
-
     private boolean isRunning = false;
 
     @Override
@@ -117,7 +99,7 @@ public class FragmentList extends Fragment implements OnItemClickListener {
         weatherDataSource.close();
     }
 
-    public  void getWeather(final int maximumDownloadTime, final int interval) {
+    public  void getWeather() {
 
         Thread thread = new Thread(new Runnable() {
             @Override

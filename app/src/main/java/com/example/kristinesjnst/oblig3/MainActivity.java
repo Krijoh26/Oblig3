@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public void downloadData() {
         FragmentList fragmentList = (FragmentList) getFragmentManager().findFragmentById(R.id.list_fragment);
         if(!fragmentList.isRunning()) {
-            fragmentList.getWeather(30, 1);
+            fragmentList.getWeather();
         }
     }
 }
