@@ -20,4 +20,6 @@ public class Weather {
         this.pressure = pressure;
         this.humidity = humidity;
     }
+    public Weather() {
+    }
 }

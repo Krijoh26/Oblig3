@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FragmentList fragmentList = new FragmentList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.download:
-                downloadData();
+
+//                if(!fragmentList.isRunning())
+                    fragmentList.getWeather();
                 return true;
 
             case R.id.quit:
@@ -33,13 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void downloadData() {
-        FragmentList fragmentList = (FragmentList) getFragmentManager().findFragmentById(R.id.list_fragment);
-        if(!fragmentList.isRunning()) {
-            fragmentList.getWeather();
         }
     }
 }
