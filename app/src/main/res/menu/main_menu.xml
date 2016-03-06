@@ -2,45 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/changeTime"
-        android:title="@string/changeTime"
-        app:showAsAction="ifRoom">
-        <menu>
-            <group android:checkableBehavior="single">
-
-            </group>
-        </menu>
-    </item>
-
-    <item
-        android:id="@+id/changeDownloadTime"
+    <item android:id="@+id/changeDownloadTime"
         android:title="@string/changeDownloadTime"
         app:showAsAction="ifRoom">
         <menu>
         <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/downloadTime120sek"
+
+            <item android:id="@+id/downloadTime120sek"
                 android:orderInCategory="1"
                 app:showAsAction="never"
                 android:title="@string/sek120"
                 android:checked="true"/>
-            <item
-                android:id="@+id/downloadTime60sek"
+
+            <item android:id="@+id/downloadTime60sek"
                 android:orderInCategory="2"
                 app:showAsAction="never"
                 android:title="@string/sek60"
                 android:checked="false"/>
 
-            <item
-                android:id="@+id/downloadTime10sek"
+            <item android:id="@+id/downloadTime10sek"
                 android:title="@string/sek10"
                 android:orderInCategory="3"
                 app:showAsAction="never"
                 android:checked="false"/>
 
-            <item
-                android:id="@+id/downloadTime5sek"
+            <item android:id="@+id/downloadTime5sek"
                 android:title="@string/sek5"
                 android:orderInCategory="4"
                 app:showAsAction="never"
@@ -55,31 +41,28 @@
         app:showAsAction="ifRoom">
         <menu>
         <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/nullgraderslia"
+
+            <item android:id="@+id/nullgraderslia"
                 android:orderInCategory="1"
                 android:title="@string/nullgraderslia"
                 android:checked="true"/>
-            <item
-                android:id="@+id/iskaldtoppen"
+
+            <item android:id="@+id/iskaldtoppen"
                 android:orderInCategory="2"
                 android:title="@string/iskaldtoppen"
                 android:checked="false"/>
 
-            <item
-                android:id="@+id/stranda"
+            <item android:id="@+id/stranda"
                 android:title="@string/stranda"
                 android:orderInCategory="3"
                 android:checked="false"/>
 
-            <item
-                android:id="@+id/syden"
+            <item android:id="@+id/syden"
                 android:title="@string/syden"
                 android:orderInCategory="4"
                 android:checked="false"/>
 
-            <item
-                android:id="@+id/nordpolen"
+            <item android:id="@+id/nordpolen"
                 android:title="@string/nordpolen"
                 android:orderInCategory="5"
                 android:checked="false"/>
@@ -93,27 +76,25 @@
         app:showAsAction="ifRoom">
         <menu>
             <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/interval1sek"
+
+                <item android:id="@+id/interval1sek"
                     android:title="@string/sek1"
                     android:orderInCategory="1"
                     android:checked="true"/>
 
-                <item
-                    android:id="@+id/interval5sek"
+                <item android:id="@+id/interval5sek"
                     android:title="@string/sek5"
                     android:orderInCategory="2"
                     android:checked="false"/>
             </group>
         </menu>
     </item>
-    <item
-        android:id="@+id/delete"
+
+    <item android:id="@+id/delete"
         android:title="@string/delete"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/quit"
+    <item android:id="@+id/quit"
         android:title="@string/quit"
         app:showAsAction="never"/>
 </menu>

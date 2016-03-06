@@ -1,40 +1,25 @@
 package com.example.kristinesjnst.oblig3;
 
-import android.content.DialogInterface;
 import android.database.Cursor;
-import android.os.AsyncTask;
-import android.os.SystemClock;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Switch;
-
+import android.widget.TextView;
 import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -48,17 +33,15 @@ public class FragmentList extends Fragment implements View.OnClickListener {
     private int stationId = 0;
     private int interval = 1;
     private Switch downloadSwitch;
-    private DownloadCallbacks downloadCallback;
-
-    interface DownloadCallbacks {
-        void onDownloadCancelled();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.list_fragment, container, false);
     }
 
+    /**
+     * Aktiverer cookies og setter retained fragment
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,16 +49,21 @@ public class FragmentList extends Fragment implements View.OnClickListener {
         CookieHandler.setDefault(cookieManager);
         setRetainInstance(true);
     }
-
+    /**
+     * Setter nedlastning og visning av data på onclickListener
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         getActivity().findViewById(R.id.btnDownload).setOnClickListener(this);
         getActivity().findViewById(R.id.btnShowData).setOnClickListener(this);
-        downloadSwitch = (Switch) getActivity().findViewById(R.id.btnDownload);
+
     }
 
+    /**
+     * Tegner graf
+     */
     public void generateGraphView() {
         RadioButton radioButton;
         GraphView graph = (GraphView)this.getActivity().findViewById(R.id.graphView);
@@ -86,6 +74,7 @@ public class FragmentList extends Fragment implements View.OnClickListener {
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
+            series.setColor(Color.RED);
         }
         radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_humidity);
         if(radioButton.isChecked()){
@@ -93,6 +82,7 @@ public class FragmentList extends Fragment implements View.OnClickListener {
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
+            series.setColor(Color.GREEN);
         }
         radioButton = (RadioButton)getActivity().findViewById(R.id.radiobutton_pressure);
         if(radioButton.isChecked()){
@@ -100,16 +90,17 @@ public class FragmentList extends Fragment implements View.OnClickListener {
             graph.addSeries(series);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
+            series.setColor(Color.YELLOW);
         }
         graph.setTitle(station_name);
     }
-
+    /**
+     * Henter data fra database som settes inn i grafen
+     */
     private LineGraphSeries<DataPoint> generateLineGraphDataFromDB(String dataType) {
         int count = 0;
         ArrayList<DataPoint> dataPoints = new ArrayList<>();
-        Cursor cursor = weatherDataSource.getAllWeather();
-
-        //TODO:fix so the graph shows right graph
+        Cursor cursor = weatherDataSource.getDataWithStationId(getStationId());
 
         while(cursor.moveToNext()) {
             station_name = cursor.getString(cursor.getColumnIndex("station_name"));
@@ -119,6 +110,7 @@ public class FragmentList extends Fragment implements View.OnClickListener {
             double y = temperature;
             DataPoint point = new DataPoint(x, y);
             dataPoints.add(point);
+
         }
         count = 0;
         DataPoint[] points = new DataPoint[dataPoints.size()];
@@ -128,6 +120,7 @@ public class FragmentList extends Fragment implements View.OnClickListener {
         }
         return new LineGraphSeries<>(points);
     }
+
 
     @Override
     public void onStart() {
@@ -152,9 +145,7 @@ public class FragmentList extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.btnDownload:
-                //TODO:fix interval and download time
-                DownloadAsyncTask task = new DownloadAsyncTask();
-                task.execute();
+                connectToServer();
                 break;
             case R.id.btnShowData:
                 generateGraphView();
@@ -186,63 +177,54 @@ public class FragmentList extends Fragment implements View.OnClickListener {
         this.interval = interval;
     }
 
+    /**
+     * Starter ny tråd for nedlastning og setter nedlastningstid
+     */
 
-    private class DownloadAsyncTask extends AsyncTask<Void, Void, String> {
-        /**
-         * NB! Man kan ikke oppdatere GUI fra doInBackGround():
-         */
-        @Override
-        protected String doInBackground(Void... params) {
-            return this.connectToServer();
-        }
+    private void connectToServer() {
 
-        @Override
-        protected void onCancelled() {
-            if (downloadCallback != null) {
-                downloadCallback.onDownloadCancelled();
-            }
-        }
-
-        private String connectToServer() {
-            if (!isRunning) {
-                    isRunning = true;
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            long timeStart = System.currentTimeMillis();
-                            long timeElapsed;
-                            long runningTime = getDownloadTime() * 1000;
-                            do {
-                                getWeatherFromUrl();
-                                timeElapsed = runningTime - timeStart;
-                            }
-                            while (isRunning && timeElapsed < runningTime);
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    if (downloadSwitch.isActivated())
-                                        downloadSwitch.toggle();
-                                }
-                            });
-                        }
-                    }).start();
-
-                } else {
-                    isRunning = false;
-                    downloadSwitch.toggle();
-                }
-            return "0";
-        }
-
-        public void getWeatherFromUrl() {
-            Thread thread = new Thread(new Runnable() {
+        if (!isRunning) {
+            isRunning = true;
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String myURL = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=" + getStationId();
-                    HttpURLConnection httpURLConnection;
+                    long startTime = System.currentTimeMillis();
+                    long timeElapsed;
+
+                    do {
+                        getWeatherFromUrl();
+                        long timeEnd = System.currentTimeMillis();
+                        timeElapsed = timeEnd - startTime;
+                    }
+                    while (isRunning && timeElapsed < 1000 * getDownloadTime());
+                    downloadSwitch = (Switch) getActivity().findViewById(R.id.btnDownload);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(downloadSwitch.isChecked())
+                                downloadSwitch.setChecked(false);
+                        }
+                    });
+                }
+            }).start();
+
+        } else {
+            isRunning = false;
+        }
+    }
+
+    /**
+     * Laster ned fra URL og legger det inn i databasen
+     */
+    public void getWeatherFromUrl() {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String myURL = "http://kark.hin.no/~wfa/fag/android/2016/weather/vdata.php?id=" + getStationId();
+                HttpURLConnection httpURLConnection;
+
                     try {
-                        Thread.sleep(1000*getInterval());
 
                         URL url = new URL(myURL);
                         httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -254,30 +236,28 @@ public class FragmentList extends Fragment implements View.OnClickListener {
 
                             Gson gson = new Gson();
                             Weather weather = gson.fromJson(new InputStreamReader(httpURLConnection.getInputStream()), Weather.class);
-                            weatherDataSource.createWeatherData( weather.getId(), weather.getStation_name(), weather.getStation_position(), weather.getTimestamp(),
+                            weatherDataSource.createWeatherData(weather.getId(), weather.getStation_name(), weather.getStation_position(), weather.getTimestamp(),
                                     weather.getTemperature(), weather.getPressure(), weather.getHumidity());
                         }
+
 
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 }
-            });
+//            }
+        });
 
-            thread.start();
+        thread.start();
+        try {
+            thread.join();
+            Thread.sleep(1000 * getInterval());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Set the callback to null so we don't accidentally leak the Activity instance.
-     */
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        downloadCallback = null;
-    }
+
 }

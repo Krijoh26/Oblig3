@@ -6,9 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.sql.SQLException;
 
 public class WeatherDataSource {
-    public SQLiteDatabase database;
+    private SQLiteDatabase database;
     private SQLiteHelper dbHelper;
-    private FragmentList parent;
 
     private String[] weatherColumns = {
             SQLiteHelper.KEY_PRIMARY_ID,
@@ -20,10 +19,11 @@ public class WeatherDataSource {
             SQLiteHelper.KEY_PRESSURE,
             SQLiteHelper.KEY_HUMIDITY};
 
-
+    /**
+     * Konstruktør
+     */
     public WeatherDataSource(FragmentList parentFragment) {
-        parent = parentFragment;
-        dbHelper = new SQLiteHelper(parent.getActivity());
+        dbHelper = new SQLiteHelper(parentFragment.getActivity());
     }
 
     public void open() throws SQLException {
@@ -34,6 +34,9 @@ public class WeatherDataSource {
         dbHelper.close();
     }
 
+    /**
+     * Lagrer data i databasen
+     */
     public boolean createWeatherData (int id, String station_name, String station_position, String timestamp, double temperature, double pressure, double humidity)  {
         try {
             open();
@@ -52,12 +55,11 @@ public class WeatherDataSource {
 
         long result = database.insert(SQLiteHelper.WEATHER_TABLE, null, values);
 
-        if(result >= 0)
-            return true;
-        else
-            return false;
+        return result >= 0;
     }
-
+    /**
+     * Henter ut data fra databasen med bruk av Id
+     */
     public Cursor getDataWithStationId(int station_id) {
         try {
             open();
@@ -71,22 +73,19 @@ public class WeatherDataSource {
 
         Cursor cursor = database.query(SQLiteHelper.WEATHER_TABLE, weatherColumns, whereClause, whereArgs, null, null, null);
 
-        close();
         return cursor;
     }
 
+    /**
+     * Sletter lokalt lagrede data
+     */
     public void deleteAllStoredData(){
-        database.execSQL("DROP TABLE IF EXISTS " + SQLiteHelper.WEATHER_TABLE);
-        database.execSQL(SQLiteHelper.WEATHER_TABLE_CREATE);
-    }
-
-    public Cursor getAllWeather (){
         try {
             open();
+            database.delete(SQLiteHelper.WEATHER_TABLE, null, null);
+            close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        dbHelper.getReadableDatabase();
-        return database.query(SQLiteHelper.WEATHER_TABLE, weatherColumns, null, null, null, null, null);
     }
 }

@@ -12,15 +12,25 @@ import android.view.WindowManager;
 public class MainActivity extends AppCompatActivity {
 
     private FragmentList fragmentList;
+    private static final String FRAGMENT_TAG = "DOWNLOAD_FRAGMENT";
 
+
+    /**
+     * Setter keep screen on, og initialiserer fragmentlist
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentList = (FragmentList)fragmentManager.findFragmentById(R.id.list_fragment);
+        FragmentManager fm = getSupportFragmentManager();
+        fragmentList = (FragmentList) fm.findFragmentByTag(FRAGMENT_TAG);
+
+        if (fragmentList == null) {
+            fragmentList = new FragmentList();
+            fm.beginTransaction().add(fragmentList, FRAGMENT_TAG).commit();
+        }
     }
 
     @Override
@@ -84,7 +94,9 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    /**
+     * Sjekker om en knapp er trykt på og setter verdien til true eller false
+     */
     private void isChecked(MenuItem item) {
         if(item.isChecked()) {
             item.setChecked(false);
@@ -92,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
             item.setChecked(true);
         }
     }
-
+    /**
+     * Dialog for å slette lagret data, kaller på metoden deleteAllStoredData()
+     */
     public void deleteDialog(){
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle("Delete");
@@ -111,7 +125,9 @@ public class MainActivity extends AppCompatActivity {
                 });
         alertDialog.show();
     }
-
+    /**
+     * Dialog for å avslutte
+     */
     public void quitDialog(){
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle("Quit");

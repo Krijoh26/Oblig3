@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
 
-    public SQLiteDatabase database;
-
     private static final String DATABASE_NAME = "WeatherDB.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     public static final String WEATHER_TABLE = "WeatherTable";
 
     public static final String KEY_PRIMARY_ID = "_id";
@@ -22,6 +20,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_PRESSURE = "pressure";
     public static final String KEY_HUMIDITY = "humidity";
 
+
+    /**
+     * Oppretter string for opprettning av tabell
+     */
     public static final String WEATHER_TABLE_CREATE = "CREATE TABLE "
             + WEATHER_TABLE
             + " (" + KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -40,11 +42,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Oppretter tabell
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(WEATHER_TABLE_CREATE);
     }
 
+    /**
+     *  Oppdaterer tabell
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + WEATHER_TABLE);
