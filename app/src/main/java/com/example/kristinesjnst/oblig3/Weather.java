@@ -72,4 +72,16 @@ public class Weather {
     public double getHumidity(){
         return humidity;
     }
+
+    @Override
+    public String toString() {
+        return "Weather{ " +
+                "Id: " + id +
+                "Station name: " + station_name +
+                "Station position: " + station_position +
+                "Timestamp: " + timestamp +
+                "Temperature: " + temperature +
+                "Pressure: " + pressure +
+                "Humidity: " + humidity + "}";
+    }
 }

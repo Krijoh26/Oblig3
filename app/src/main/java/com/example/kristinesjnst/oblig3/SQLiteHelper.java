@@ -4,11 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.sql.SQLException;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
+
+    public SQLiteDatabase database;
+
     private static final String DATABASE_NAME = "WeatherDB.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     public static final String WEATHER_TABLE = "WeatherTable";
 
     public static final String KEY_PRIMARY_ID = "_id";
@@ -20,7 +22,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_PRESSURE = "pressure";
     public static final String KEY_HUMIDITY = "humidity";
 
-    private static final String WEATHER_TABLE_CREATE = "CREATE TABLE "
+    public static final String WEATHER_TABLE_CREATE = "CREATE TABLE "
             + WEATHER_TABLE
             + " (" + KEY_PRIMARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + KEY_ID + " INTEGER, "
@@ -31,7 +33,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             + KEY_PRESSURE + " INTEGER, "
             + KEY_HUMIDITY + " INTEGER );";
 
-    private SQLiteDatabase database;
+
 
 
     public SQLiteHelper(Context context) {
@@ -40,7 +42,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.execSQL("DROP TABLE IF EXISTS " + WEATHER_TABLE);
         db.execSQL(WEATHER_TABLE_CREATE);
     }
 
@@ -48,9 +49,5 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + WEATHER_TABLE);
         onCreate(db);
-    }
-
-    public void open() throws SQLException {
-        database = this.getWritableDatabase();
     }
 }
